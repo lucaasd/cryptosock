@@ -1,12 +1,25 @@
 #ifndef SERVER
 #define SERVER
 
+#include <cstdint>
 #include <string>
 #include <atomic>
 
 extern const int BUFFER_SIZE;
 
+
+
 namespace server {
+
+enum ParseError {
+    ERR_SUCCESS = 0,
+    ERR_ZERO_SIZE = 1,
+    ERR_EMPTY = 2,
+    ERR_EMPTY_MSG = 3,
+    ERR_SIZE_MISMATCH = 4,
+    ERR_EVENT_NULLPTR = 5,
+    ERR_MESSAGE_NULLPTR = 6
+};
 
 typedef void (*ServerCallback)(const std::string& event, bool internal, const std::string& data, const std::string& to);
 
@@ -22,5 +35,6 @@ class Server {
     ServerCallback onStart;
     };
 
+int parse(unsigned char* payload, std::string* event, std::string* message, uint16_t size);
 }
 #endif

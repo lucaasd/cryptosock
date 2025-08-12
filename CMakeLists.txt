@@ -7,6 +7,8 @@ find_package(fmt CONFIG REQUIRED)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_BUILD_TYPE Debug)
+
 enable_testing()
 
 file(GLOB_RECURSE SOURCES src/*.cpp)
