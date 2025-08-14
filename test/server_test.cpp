@@ -66,3 +66,18 @@ TEST(ServerUtilTest, PayloadParseWithMessageTest)
     EXPECT_EQ(event, std::string("abcd"));
     EXPECT_EQ(message, std::string("efg"));
 }
+
+TEST(ServerUtilTest, PayloadParseWithWrongMessageSize) {
+    unsigned char payload[] = {0x04, 'a', 'b', 'c', 'd', 0x05, 'e', 'f', 'g'};
+    unsigned char* ptr = payload;
+
+
+    std::string event;
+    std::string message;
+
+    int rc = server::parse(ptr, &event, &message, std::size(payload));
+
+    fmt::println("RC: {}", rc);
+
+    EXPECT_EQ(rc, server::ERR_SIZE_MISMATCH);
+}
