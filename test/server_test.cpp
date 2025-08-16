@@ -81,3 +81,15 @@ TEST(ServerUtilTest, PayloadParseWithWrongMessageSize) {
 
     EXPECT_EQ(rc, server::ERR_SIZE_MISMATCH);
 }
+
+TEST(ServerUtilTest, TestSerialize) {
+    std::string event = "PING";
+    std::string message = "Hello";
+    unsigned char payload[11];
+
+    int rc = server::serialize(payload, event, message);
+
+    const char* expected = "\04PING\05Hello";
+
+    EXPECT_EQ(*reinterpret_cast<const char*>(payload), *expected);
+}

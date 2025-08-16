@@ -12,7 +12,7 @@ extern const std::string errStrings[];
 
 namespace server {
 
-enum ParseError {
+enum MessageError {
     ERR_SUCCESS = 0,
     ERR_ZERO_SIZE = 1,
     ERR_EMPTY = 2,
@@ -20,6 +20,7 @@ enum ParseError {
     ERR_SIZE_MISMATCH = 4,
     ERR_EVENT_NULLPTR = 5,
     ERR_MESSAGE_NULLPTR = 6,
+    ERR_PAYLOAD_NULLPTR = 7
 };
 
 typedef void (*ServerCallback)(const std::string* event, const std::string* data, int target, bool internal);
@@ -40,7 +41,11 @@ class Server {
 };
 
 int parse(unsigned char* payload, std::string* event, std::string* message, uint16_t size);
+
+int serialize(unsigned char* payload, std::string event, std::string message);
+std::string sv_strerror(int err);
+
 }
 
-std::string sv_strerror(int err);
+
 #endif

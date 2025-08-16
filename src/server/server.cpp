@@ -59,6 +59,35 @@ namespace server {
         return ERR_SUCCESS;
     }
 
+    int serialize(unsigned char *payload, std::string event, std::string message)
+    {
+        if (payload == nullptr)
+        {
+            return ERR_PAYLOAD_NULLPTR;
+        }
+
+        if (event.size() == 0 || message.size() == 0)
+        {
+            return ERR_ZERO_SIZE;
+        }
+
+        payload[0] = (char)(event.size());
+
+        for (int i = 0; i < event.size(); i++)
+        {
+            payload[i + 1] = event[i];
+        }
+
+        payload[event.size()] = message.size();
+
+        for (int i = 0; i < message.size(); i++)
+        {
+            payload[event.size() + 2 + i] = message[i];
+        }
+
+        return ERR_SUCCESS;
+    }
+
     std::string sv_strerror(int err) {
         if (err <= std::size(errorStrings) - 1)
         {
@@ -112,7 +141,6 @@ namespace server {
                 fmt::println("Bytes: {}", bytesRead);
                 fmt::println("Errno {}/{}", errno, strerror(errno));
 
-                buffer[bytesRead] = '\0';
 
                 uint8_t eventSize = buffer[0];
 
@@ -140,7 +168,6 @@ namespace server {
                 }
             }
         }
-
         close(_serverSocket);
     }
 
